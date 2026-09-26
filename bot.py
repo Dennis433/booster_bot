@@ -442,7 +442,6 @@ async def confirm_boost(update: Update, context: ContextTypes.DEFAULT_TYPE):
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
 
-    # Payment info message
     await query.message.reply_text(
         f"💳 *Payment Details*\n\n"
         f"💰 *Amount:* `{payment_amount}`\n"
@@ -453,13 +452,11 @@ async def confirm_boost(update: Update, context: ContextTypes.DEFAULT_TYPE):
         parse_mode="Markdown"
     )
 
-    # Address sent alone as copyable code block
     await query.message.reply_text(
         f"`{PAYMENT_WALLET}`",
         parse_mode="Markdown"
     )
 
-    # Confirmation button
     await query.message.reply_text(
         f"━━━━━━━━━━━━━━━\n"
         f"⚠️ _Send exact amount to avoid delays_\n\n"
@@ -515,7 +512,7 @@ async def cancel(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 # ── Main ─────────────────────────────────────────────────
-def main():
+async def main():
     app = Application.builder().token(TELEGRAM_TOKEN).build()
 
     conv_handler = ConversationHandler(
@@ -536,8 +533,8 @@ def main():
 
     app.add_handler(conv_handler)
     print("🚀 G4S Bot is running...")
-    app.run_polling()
+    await app.run_polling()
 
 
 if __name__ == "__main__":
-    main()
+    asyncio.run(main())
