@@ -1,13 +1,14 @@
 # config.py
+import os
 
-# Telegram Bot Token (get from @BotFather on Telegram)
-TELEGRAM_TOKEN = "8669913888:AAEIsMnsrbakFBL26RRfkr5PjbhU90znwlg"
+# Telegram Bot Token — set in Render environment variables
+TELEGRAM_TOKEN = os.environ.get("TELEGRAM_TOKEN", "")
 
 # Solana RPC endpoint
 SOLANA_RPC = "https://api.mainnet-beta.solana.com"
 
-# Payment wallet address
-PAYMENT_WALLET = "9M8vaRdCErA4n7uNgXdS7ZtKZ9VwtwVV6ygcnh9L8ogQ"
+# Payment wallet address — set in Render environment variables
+PAYMENT_WALLET = os.environ.get("PAYMENT_WALLET", "")
 
 # Boost settings
 NUM_WALLETS = 10
