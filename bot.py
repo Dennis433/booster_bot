@@ -1,6 +1,8 @@
 # bot.py
 
 import asyncio
+import os
+from aiohttp import web
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import (
     Application, CommandHandler, CallbackQueryHandler,
@@ -512,8 +514,26 @@ async def cancel(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 
+# ── Health Check Server ──────────────────────────────────
+async def health_check(request):
+    return web.Response(text="OK")
+
+async def run_health_server():
+    server = web.Application()
+    server.router.add_get("/", health_check)
+    runner = web.AppRunner(server)
+    await runner.setup()
+    port = int(os.environ.get("PORT", 8080))
+    site = web.TCPSite(runner, "0.0.0.0", port)
+    await site.start()
+    print(f"✅ Health server running on port {port}")
+
+
 # ── Main ─────────────────────────────────────────────────
 async def main():
+    # Start dummy HTTP server so Render detects an open port
+    await run_health_server()
+
     app = Application.builder().token(TELEGRAM_TOKEN).build()
 
     conv_handler = ConversationHandler(
