@@ -511,6 +511,7 @@ async def cancel(update: Update, context: ContextTypes.DEFAULT_TYPE):
     return CHOOSING
 
 
+
 # ── Main ─────────────────────────────────────────────────
 async def main():
     app = Application.builder().token(TELEGRAM_TOKEN).build()
@@ -532,8 +533,20 @@ async def main():
     )
 
     app.add_handler(conv_handler)
+
     print("🚀 G4S Bot is running...")
-    await app.run_polling()
+
+    await app.initialize()
+    await app.start()
+    await app.updater.start_polling()
+
+    # Run forever until interrupted
+    await asyncio.Event().wait()
+
+    # Graceful shutdown
+    await app.updater.stop()
+    await app.stop()
+    await app.shutdown()
 
 
 if __name__ == "__main__":
